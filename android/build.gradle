@@ -1,38 +1,45 @@
 // Inspired by rayronvictor's PR #248 tp react-native-config
 // https://github.com/luggit/react-native-config/pull/248
 
-def _ext = rootProject.ext
+def safeExtGet(prop, fallback) {
+	rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
 
 buildscript {
-  repositories {
-    maven {
-      url 'https://maven.google.com/'
-      name 'Google'
-    }
-    jcenter()
-    google()
-  }
+  // The Android Gradle plugin is only required when opening the android folder stand-alone.
+  // This avoids unnecessary downloads and potential conflicts when the library is included as a
+  // module dependency in an application project.
+  if (project == rootProject) {
+      repositories {
+        mavenLocal()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        google()
+        jcenter()
+        maven { url 'https://www.jitpack.io' }
+      }
 
-  dependencies {
-    classpath _ext.has('gradleBuildTools') ? _ext.gradleBuildTools : 'com.android.tools.build:gradle:3.4.0'
+      dependencies {
+          classpath("com.android.tools.build:gradle:3.5.3")
+      }
   }
 }
 
 apply plugin: 'com.android.library'
 
-def _reactNativeVersion = _ext.has('reactNative') ? _ext.reactNative : '+'
-def _compileSdkVersion = _ext.has('compileSdkVersion') ? _ext.compileSdkVersion : 27
-def _buildToolsVersion = _ext.has('buildToolsVersion') ? _ext.buildToolsVersion : '27.0.3'
-def _minSdkVersion = _ext.has('minSdkVersion') ? _ext.minSdkVersion : 16
-def _targetSdkVersion = _ext.has('targetSdkVersion') ? _ext.targetSdkVersion : 27
-
 android {
-  compileSdkVersion _compileSdkVersion
-  buildToolsVersion _buildToolsVersion
+  compileSdkVersion safeExtGet('compileSdkVersion', 30)
+  buildToolsVersion safeExtGet('buildToolsVersion', '30.0.3')
 
   defaultConfig {
-    minSdkVersion _minSdkVersion
-    targetSdkVersion _targetSdkVersion
+    minSdkVersion safeExtGet('minSdkVersion', 16)
+    targetSdkVersion safeExtGet('targetSdkVersion', 30)
     versionCode 1
     versionName "1.0"
   }
@@ -42,9 +49,23 @@ android {
 }
 
 repositories {
-  mavenCentral()
+          mavenLocal()
+
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        google()
+        jcenter()
+        maven { url 'https://www.jitpack.io' }
+
 }
 
 dependencies {
-  implementation "com.facebook.react:react-native:${_reactNativeVersion}"
+    api 'com.facebook.react:react-native:+'
+    api 'androidx.biometric:biometric:1.2.0-alpha01'
 }

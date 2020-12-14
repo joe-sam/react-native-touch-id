@@ -7,15 +7,29 @@ import android.content.Context;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.UiThreadUtil;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 
 import javax.crypto.Cipher;
 
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.biometric.BiometricPrompt.CryptoObject;
+import androidx.biometric.BiometricPrompt.AuthenticationCallback;
+import androidx.biometric.BiometricPrompt.PromptInfo;
+import androidx.fragment.app.FragmentActivity;
+
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 public class FingerprintAuthModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
 
     private static final String FRAGMENT_TAG = "fingerprint_dialog";
@@ -158,4 +172,91 @@ public class FingerprintAuthModule extends ReactContextBaseJavaModule implements
     public void onHostDestroy() {
         isAppActive = false;
     }
+
+    @ReactMethod
+    public void isSensorAvailable(Promise promise) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ReactApplicationContext reactApplicationContext = getReactApplicationContext();
+                BiometricManager biometricManager = BiometricManager.from(reactApplicationContext);
+                int canAuthenticate = biometricManager.canAuthenticate();
+
+                if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
+                    WritableMap resultMap = new WritableNativeMap();
+                    resultMap.putBoolean("available", true);
+                    resultMap.putString("biometryType", "Biometrics");
+                    promise.resolve(resultMap);
+                } else {
+                    WritableMap resultMap = new WritableNativeMap();
+                    resultMap.putBoolean("available", false);
+
+                    switch (canAuthenticate) {
+                        case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                            resultMap.putString("error", "BIOMETRIC_ERROR_NO_HARDWARE");
+                            break;
+                        case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                            resultMap.putString("error", "BIOMETRIC_ERROR_HW_UNAVAILABLE");
+                            break;
+                        case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                            resultMap.putString("error", "BIOMETRIC_ERROR_NONE_ENROLLED");
+                            break;
+                    }
+
+                    promise.resolve(resultMap);
+                }
+            } else {
+                WritableMap resultMap = new WritableNativeMap();
+                resultMap.putBoolean("available", false);
+                resultMap.putString("error", "Unsupported android version");
+                promise.resolve(resultMap);
+            }
+        } catch (Exception e) {
+            promise.reject("Error detecting biometrics availability: " + e.getMessage(), "Error detecting biometrics availability: " + e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void simplePrompt(final ReadableMap params, final Promise promise) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            UiThreadUtil.runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String cancel = params.getString("cancel");
+                                String title = params.getString("title");
+                                String subtitle = params.getString("subtitle");
+                                String description = params.getString("description");
+
+                                AuthenticationCallback authCallback = new SimplePromptCallback(promise);
+                                FragmentActivity fragmentActivity = (FragmentActivity) getCurrentActivity();
+                                Executor executor = Executors.newSingleThreadExecutor();
+                                BiometricPrompt biometricPrompt = new BiometricPrompt(fragmentActivity, executor, authCallback);
+
+                                PromptInfo promptInfo = new PromptInfo.Builder()
+                                        .setDeviceCredentialAllowed(false)
+                                        .setNegativeButtonText(cancel)
+                                        .setTitle(title)
+                                        .build();
+
+
+                                final Cipher cipher = new FingerprintCipher().getCipher();
+                                        if (cipher == null) {
+                                            inProgress = false;
+                                            promise.reject("Cipher Not supported", "Cipher Not supported");
+                                            return;
+                                        }
+                                final CryptoObject crypto = new BiometricPrompt.CryptoObject(cipher);
+                                biometricPrompt.authenticate(promptInfo,crypto );
+                            } catch (Exception e) {
+                                promise.reject("Error displaying local biometric prompt: " + e.getMessage(), "Error displaying local biometric prompt: " + e.getMessage());
+                            }
+                        }
+                    });
+        } else {
+            promise.reject("Cannot display biometric prompt on android versions below 6.0", "Cannot display biometric prompt on android versions below 6.0");
+        }
+    }
+
+
 }
