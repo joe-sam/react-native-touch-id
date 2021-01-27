@@ -13,7 +13,7 @@
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-passcode-auth": "1.0.0",
-    "react-native-touch-id": "file:../../react-native-touch-id-4.4.2.tgz"
+    "react-native-touch-id": "file:../../react-native-touch-id-4.4.3.tgz"
   },
   "devDependencies": {
     "@babel/core": "7.12.9",

@@ -21,10 +21,12 @@ import com.facebook.react.bridge.WritableNativeMap;
 import javax.crypto.Cipher;
 
 import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricManager.Authenticators;
 import androidx.biometric.BiometricPrompt;
 import androidx.biometric.BiometricPrompt.CryptoObject;
 import androidx.biometric.BiometricPrompt.AuthenticationCallback;
 import androidx.biometric.BiometricPrompt.PromptInfo;
+import androidx.biometric.BiometricPrompt.PromptInfo.Builder;
 import androidx.fragment.app.FragmentActivity;
 
 
@@ -227,27 +229,37 @@ public class FingerprintAuthModule extends ReactContextBaseJavaModule implements
                                 String title = params.getString("title");
                                 String subtitle = params.getString("subtitle");
                                 String description = params.getString("description");
+                                Boolean usecrypto = params.getBoolean("usecrypto");
 
                                 AuthenticationCallback authCallback = new SimplePromptCallback(promise);
                                 FragmentActivity fragmentActivity = (FragmentActivity) getCurrentActivity();
                                 Executor executor = Executors.newSingleThreadExecutor();
                                 BiometricPrompt biometricPrompt = new BiometricPrompt(fragmentActivity, executor, authCallback);
 
-                                PromptInfo promptInfo = new PromptInfo.Builder()
-                                        .setDeviceCredentialAllowed(false)
-                                        .setNegativeButtonText(cancel)
-                                        .setTitle(title)
-                                        .build();
 
+                                final BiometricPrompt.PromptInfo.Builder promptBuilder = new BiometricPrompt.PromptInfo.Builder()
+                                                .setNegativeButtonText(cancel)
+                                                .setTitle(title)
+                                                .setSubtitle(subtitle)
+                                                .setAllowedAuthenticators(usecrypto? Authenticators.BIOMETRIC_STRONG : Authenticators.BIOMETRIC_WEAK );
 
-                                final Cipher cipher = new FingerprintCipher().getCipher();
-                                        if (cipher == null) {
-                                            inProgress = false;
-                                            promise.reject("Cipher Not supported", "Cipher Not supported");
-                                            return;
-                                        }
-                                final CryptoObject crypto = new BiometricPrompt.CryptoObject(cipher);
-                                biometricPrompt.authenticate(promptInfo,crypto );
+                                  PromptInfo promptInfo = promptBuilder.build();
+
+                                if (usecrypto) {
+                                    final Cipher cipher = new FingerprintCipher().getCipher();
+                                            if (cipher == null) {
+                                                inProgress = false;
+                                                promise.reject("Cipher Not supported", "Cipher Not supported");
+                                                return;
+                                            }
+                                    final CryptoObject crypto = new BiometricPrompt.CryptoObject(cipher);
+                                    biometricPrompt.authenticate(promptInfo,crypto) ; // requires BIOMETRIC_STRONG e.g fingerprint only but not face/iris
+                                }
+                                else {
+                                    biometricPrompt.authenticate(promptInfo); // requires BIOMETRIC_WEAK e.g fingerprint & or face/iris
+                                }
+
+                                // ELSE
                             } catch (Exception e) {
                                 promise.reject("Error displaying local biometric prompt: " + e.getMessage(), "Error displaying local biometric prompt: " + e.getMessage());
                             }

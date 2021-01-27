@@ -19,7 +19,12 @@ class TouchComponent extends Component {
         super(props);
       }
   _pressHandler() {
-    const optionalConfigObject = { title: 'Authentication Required', color: '#e00606' };
+    const optionalConfigObject = {
+      usecrypto:false,
+      title: 'Authentication Required',
+      subtitle: 'Quick demo',
+      description: 'SampleApp requires authenticaton',
+       cancelText :'Cancel' };
     TouchID.authenticate('to demo this react-native component', optionalConfigObject)
       .then(success => {
         Alert.alert('Authenticated Successfully');
