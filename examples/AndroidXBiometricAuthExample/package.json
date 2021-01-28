@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "16.13.1",
     "react-native": "0.63.2",
-    "react-native-touch-id": "file:../../react-native-touch-id-4.4.3.tgz"
+    "react-native-touch-id": "file:../../react-native-touch-id-4.4.4.tgz"
   },
   "devDependencies": {
     "@babel/core": "7.12.10",

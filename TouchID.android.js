@@ -19,7 +19,7 @@ export default {
 
           })
           .catch((error) => {
-            //console.log('Biometric', 'Failed');
+            //console.log('Biometric isSupported', error);
             return reject(createError(config, error,  codes.androidModuleCodes.NOT_SUPPORTED));
           });
 
@@ -54,7 +54,7 @@ export default {
       NativeTouchID.simplePrompt({
         title: authConfig.title,
         subtitle:  authConfig.subtitle,
-         cancel: authConfig.cancelText, // for backward compatibility
+         cancel: authConfig.cancelText,
          description: authConfig.description,
          usecrypto : authConfig.usecrypto
 

@@ -67,5 +67,5 @@ repositories {
 
 dependencies {
     api 'com.facebook.react:react-native:+'
-    api 'androidx.biometric:biometric:1.2.0-alpha01'
+    api 'androidx.biometric:biometric:1.2.0-alpha02'
 }

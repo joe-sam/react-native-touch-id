@@ -241,6 +241,7 @@ public class FingerprintAuthModule extends ReactContextBaseJavaModule implements
                                                 .setNegativeButtonText(cancel)
                                                 .setTitle(title)
                                                 .setSubtitle(subtitle)
+                                                .setDescription(description)
                                                 .setAllowedAuthenticators(usecrypto? Authenticators.BIOMETRIC_STRONG : Authenticators.BIOMETRIC_WEAK );
 
                                   PromptInfo promptInfo = promptBuilder.build();
