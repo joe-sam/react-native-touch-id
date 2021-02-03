@@ -13,7 +13,7 @@ React Native Touch ID is a [React Native](http://facebook.github.io/react-native
 
 #### Breaking changes
  This fork of the library replaces the deprecated android fingerprint lib for the new android biometric  X
-and replaces the old examples with react native 0.63.2 compatible samples.
+and replaces the old examples with react native 0.63.3 compatible samples.
 
 This MAY require an additional step
 **gradle wrapper --gradle-version 6.2**
@@ -24,7 +24,7 @@ See the script file to know how to build the examples without fetching or clonin
 
 ~~~
     # remove the old package version
-    rm react-native-touch-id-4.4.4.tgz
+    rm react-native-touch-id-4.4.5.tgz
     # rebuild the android version
     cd android
     gradle clean build
@@ -34,14 +34,14 @@ See the script file to know how to build the examples without fetching or clonin
     # remove and reinclude local version from examples
     cd examples/AndroidXBiometricAuthExample
     npm uninstall react-native-touch-id
-    npm install  ../../react-native-touch-id-4.4.4.tgz
+    npm install  ../../react-native-touch-id-4.4.5.tgz
     cd android
     gradle clean build
     cd ..
     # remove and reinclude local version from examples
     cd ../AndroidXTouchIDExample
     npm uninstall react-native-touch-id
-    npm install  ../../react-native-touch-id-4.4.4.tgz
+    npm install  ../../react-native-touch-id-4.4.5.tgz
     cd android
     gradle clean build
     cd ..
