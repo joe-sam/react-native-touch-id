@@ -1,31 +1,20 @@
 Updated this README to give the fork version
-# React Native Touch ID (original)
-[![react-native version](https://img.shields.io/badge/react--native-0.57-green.svg?style=flat-square)](https://github.com/facebook/react-native/releases)
-[![npm version](https://img.shields.io/npm/v/react-native-touch-id.svg?style=flat-square)](https://www.npmjs.com/package/react-native-touch-id)
-[![npm downloads](https://img.shields.io/npm/dm/react-native-touch-id.svg?style=flat-square)](https://www.npmjs.com/package/react-native-touch-id)
-[![Code Climate](https://img.shields.io/codeclimate/github/naoufal/react-native-touch-id.svg?style=flat-square)](https://codeclimate.com/github/naoufal/react-native-touch-id)
-
-
-React Native Touch ID is a [React Native](http://facebook.github.io/react-native/) library for authenticating users with biometric authentication methods like Face ID and Touch ID on both iOS and Android (experimental).
-
 ⚠️ Note: **The original library is not currently actively maintained.** If you're looking for something more stable that "just works", the awesome folks over at [Expo](https://expo.io) have begun open-sourcing some of their modules for compatability with React Native projects not built with Expo. As such you can attempt to use their equivalent library called [LocalAuthentication](https://docs.expo.io/versions/v30.0.0/sdk/local-authentication) at [expo-local-authentication](https://www.npmjs.com/package/expo-local-authentication) if you run into any issues here!
-
-![react-native-touch-id](https://cloud.githubusercontent.com/assets/1627824/7975919/2c69a776-0a42-11e5-9773-3ea1c7dd79f3.gif)
 
 #### Breaking changes
 
 # React Native Touch ID (Forked version)
 # FORK version details
 
-[![react-native version](https://img.shields.io/badge/react--native-0.63.3-green.svg?style=flat-square)](https://github.com/facebook/react-native/releases)
+[![react-native version](https://img.shields.io/badge/react--native-0.66.3-green.svg?style=flat-square)](https://github.com/facebook/react-native)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/joe-sam/react-native-touch-id)
 
 
  This fork of the library replaces the deprecated android fingerprint lib for the new android biometric  X
-and replaces the old examples with react native 0.63.3 compatible samples.
+and replaces the old examples with react native 0.66.3 compatible samples.
 
 This MAY require an additional step
-**gradle wrapper --gradle-version 6.2**
+**gradle wrapper --gradle-version 6.9**
 as I do not use the wrapper.
  It is included in source control merely for convenience.
 
@@ -33,7 +22,7 @@ See the script file to know how to build the examples without fetching or clonin
 
 ~~~
     # remove the old package version
-    rm react-native-touch-id-4.4.5.tgz
+    rm react-native-touch-id-4.4.6.tgz
     # rebuild the android version
     cd android
     gradle clean build
@@ -43,21 +32,21 @@ See the script file to know how to build the examples without fetching or clonin
     # remove and reinclude local version from examples
     cd examples/AndroidXBiometricAuthExample
     npm uninstall react-native-touch-id
-    npm install  ../../react-native-touch-id-4.4.5.tgz
+    npm install  ../../react-native-touch-id-4.4.6.tgz
     cd android
     gradle clean build
     cd ..
     # remove and reinclude local version from examples
     cd ../AndroidXTouchIDExample
     npm uninstall react-native-touch-id
-    npm install  ../../react-native-touch-id-4.4.5.tgz
+    npm install  ../../react-native-touch-id-4.4.6.tgz
     cd android
     gradle clean build
     cd ..
     # launch example from current folder
     react-native run-android
 ~~~
-## Documentation
+## Original Documentation
 
 - [Install](https://github.com/naoufal/react-native-touch-id#install)
 - [Usage](https://github.com/naoufal/react-native-touch-id#usage)
