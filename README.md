@@ -22,7 +22,7 @@ See the script file to know how to build the examples without fetching or clonin
 
 ~~~
     # remove the old package version
-    rm react-native-touch-id-4.4.6.tgz
+    rm react-native-touch-id-4.4.7.tgz
     # rebuild the android version
     cd android
     gradle clean build
@@ -32,14 +32,14 @@ See the script file to know how to build the examples without fetching or clonin
     # remove and reinclude local version from examples
     cd examples/AndroidXBiometricAuthExample
     npm uninstall react-native-touch-id
-    npm install  ../../react-native-touch-id-4.4.6.tgz
+    npm install  ../../react-native-touch-id-4.4.7.tgz
     cd android
     gradle clean build
     cd ..
     # remove and reinclude local version from examples
     cd ../AndroidXTouchIDExample
     npm uninstall react-native-touch-id
-    npm install  ../../react-native-touch-id-4.4.6.tgz
+    npm install  ../../react-native-touch-id-4.4.7.tgz
     cd android
     gradle clean build
     cd ..

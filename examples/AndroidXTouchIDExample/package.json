@@ -13,7 +13,7 @@
     "react": "17.0.2",
     "react-native": "0.66.3",
     "react-native-passcode-auth": "1.0.0",
-    "react-native-touch-id": "file:../../react-native-touch-id-4.4.6.tgz",    
+    "react-native-touch-id": "file:../../react-native-touch-id-4.4.7.tgz",    
     "uuid": "8.2.0"
   },
   "devDependencies": {

@@ -271,5 +271,17 @@ public class FingerprintAuthModule extends ReactContextBaseJavaModule implements
         }
     }
 
+    @ReactMethod
+    public void addListener(String eventName) {
+        // Keep: Required for RN built in Event Emitter Calls.
+        // These are needed to avoid console warnings about NativeEventEmitter being created without the required native module implementations
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Keep: Required for RN built in Event Emitter Calls.
+        // These are needed to avoid console warnings about NativeEventEmitter being created without the required native module implementations
+
+    }
 
 }
