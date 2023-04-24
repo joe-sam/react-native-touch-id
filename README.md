@@ -6,23 +6,26 @@ Updated this README to give the fork version
 # React Native Touch ID (Forked version)
 # FORK version details
 
-[![react-native version](https://img.shields.io/badge/react--native-0.66.3-green.svg?style=flat-square)](https://github.com/facebook/react-native)
+[![react-native version](https://img.shields.io/badge/react--native-0.70.9-yellowgreen)](https://github.com/facebook/react-native)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/joe-sam/react-native-touch-id)
 
 
  This fork of the library replaces the deprecated android fingerprint lib for the new android biometric  X
-and replaces the old examples with react native 0.66.3 compatible samples.
+and replaces the old examples with react native 0.70.9 compatible samples.
 
 This MAY require an additional step
 **gradle wrapper --gradle-version 6.9**
-as I do not use the wrapper.
- It is included in source control merely for convenience.
 
+The included  examples may need the  gradle wrapper upgraded. To upgrade or use your gradle wrapper 
+~~~
+./gradlew wrapper --gradle-version=7.5.1
+~~~
 See the script file to know how to build the examples without fetching or cloning the package again, (useful for local builds).
 
+Script workflow using npm
 ~~~
     # remove the old package version
-    rm react-native-touch-id-4.4.7.tgz
+    rm react-native-touch-id-4.4.8.tgz
     # rebuild the android version
     cd android
     gradle clean build
@@ -32,19 +35,53 @@ See the script file to know how to build the examples without fetching or clonin
     # remove and reinclude local version from examples
     cd examples/AndroidXBiometricAuthExample
     npm uninstall react-native-touch-id
-    npm install  ../../react-native-touch-id-4.4.7.tgz
+    npm install  ../../react-native-touch-id-4.4.8.tgz
     cd android
     gradle clean build
     cd ..
     # remove and reinclude local version from examples
     cd ../AndroidXTouchIDExample
     npm uninstall react-native-touch-id
-    npm install  ../../react-native-touch-id-4.4.7.tgz
+    npm install  ../../react-native-touch-id-4.4.8.tgz
     cd android
     gradle clean build
     cd ..
     # launch example from current folder
     react-native run-android
+~~~
+
+Using yarn has a similar workflow
+~~~
+    # remove the old package version
+    rm react-native-touch-id-4.4.8.tgz
+    # rebuild the android version
+    cd android
+    ./gradlew clean --info
+    cd ..
+    # repackage the local version
+    yarn pack
+    # example packs to a default NAME + VERSION react-native-touch-id-v4.4.8.tgz **Note the 'v' prefix added by yarn if shifting from npm to yarn** 
+
+    # remove the old local version and reinclude new local version from examples
+    cd examples/AndroidXBiometricAuthExample
+    yarn remove react-native-touch-id
+    yarn add  ../../react-native-touch-id-v4.4.8.tgz
+    cd android
+    gradle clean build
+    cd ..
+
+    # launch example from current folder
+    yarn android
+
+    # remove old local version and reinclude new local version from examples
+    cd ../AndroidXTouchIDExample
+    yarn remove react-native-touch-id
+    yarn add ../../react-native-touch-id-v4.4.8.tgz
+    cd android
+    ./gradlew clean --info
+    cd ..
+    # launch example from current folder
+    yarn android
 ~~~
 ## Original Documentation
 
