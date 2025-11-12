@@ -22,10 +22,17 @@ The included  examples may need the  gradle wrapper upgraded. To upgrade or use 
 ~~~
 See the script file to know how to build the examples without fetching or cloning the package again, (useful for local builds).
 
+
+  ### Bump the _version_ number_ of the library in *package.json* e.g., 4.4.7 -> 4.4.8, 
+  
+  #### Warning: if you're rebuilding the local examples with the library using the same version numbers you may need to remove the yarn.lock and yarn cache clean  & yarn install & gradle clean build in order to avoid old artifacts being reused from the cache and lock files.
+
 Script workflow using npm
 ~~~
-    # remove the old package version
-    rm react-native-touch-id-4.4.8.tgz
+
+
+    # remove the old package version (e.g. 4.4.7)
+    rm react-native-touch-id-4.4.7.tgz
     # rebuild the android version
     cd android
     gradle clean build
@@ -52,8 +59,8 @@ Script workflow using npm
 
 Using yarn has a similar workflow
 ~~~
-    # remove the old package version
-    rm react-native-touch-id-4.4.8.tgz
+    # remove the old package version (e.g. 4.4.7)
+    rm react-native-touch-id-4.4.7.tgz
     # rebuild the android version
     cd android
     ./gradlew clean --info

@@ -6,23 +6,19 @@ const { codes, errors } = require('./data/errors');
 export default {
   isSupported(config) {
     return new Promise((resolve, reject) => {
-
-          NativeTouchID.isSensorAvailable()
-          .then((resultObject) => {
-              const { available, biometryType, error } = resultObject;
-                  if (available && biometryType === "Biometrics") { // this is the UNIVERSAL type in ANDROID (system selected biometric)
-                      return resolve(biometryType);
-                    } else {
-                      return reject(createError(config, error, codes.androidModuleCodes.NOT_SUPPORTED));
-                    }
-
-
-          })
-          .catch((error) => {
-            //console.log('Biometric isSupported', error);
-            return reject(createError(config, error,  codes.androidModuleCodes.NOT_SUPPORTED));
-          });
-
+      NativeTouchID.isSensorAvailable()
+        .then((resultObject) => {
+          const { available, biometryType, error } = resultObject;
+          if (available && biometryType === 'Biometrics') { // this is the UNIVERSAL type in ANDROID (system selected biometric)
+            return resolve(biometryType);
+          } else {
+            return reject(createError(config, error, codes.androidModuleCodes.NOT_SUPPORTED));
+          }
+        })
+        .catch((error) => {
+          // console.log('Biometric isSupported', error);
+          return reject(createError(config, error,  codes.androidModuleCodes.NOT_SUPPORTED));
+        });
     });
   },
 
@@ -37,7 +33,7 @@ export default {
       cancelText: 'Cancel',
       description: 'Sample App requires authentication',
       unifiedErrors: false,
-      usecrypto: false,
+      usecrypto: false
     };
     var authReason = reason ? reason : ' ';
     var authConfig = Object.assign({}, DEFAULT_CONFIG, config);
@@ -47,36 +43,33 @@ export default {
     authConfig.imageColor = imageColor;
     authConfig.imageErrorColor = imageErrorColor;
 
-    //console.log(authReason,authConfig);
+    // console.log(authReason,authConfig);
 
     return new Promise((resolve, reject) => {
-
       NativeTouchID.simplePrompt({
         title: authConfig.title,
-        subtitle:  authConfig.subtitle,
-         cancel: authConfig.cancelText,
-         description: authConfig.description,
-         usecrypto : authConfig.usecrypto
+        subtitle: authConfig.subtitle,
+        cancel: authConfig.cancelText,
+        description: authConfig.description,
+        usecrypto: authConfig.usecrypto
 
-         })
-      .then((resultObject) => {
-        const { success,error } = resultObject
-
-        if (success) {
-          //console.log('Biometric', 'Success')
-          return resolve(true);
-        } else {
-          //console.log('Biometric', 'Cancelled',error);
-          return reject(createError(authConfig, "Cancelled", codes.androidModuleCodes.AUTHENTICATION_CANCELED));
-        }
       })
-      .catch((sperror) => {
-        //console.log('Biometric XX Failed:', sperror);
-        return reject(createError(authConfig, "Unknown error", codes.androidModuleCodes.AUTHENTICATION_FAILED));
-      });
+        .then((resultObject) => {
+          const { success, error } = resultObject;
 
+          if (success) {
+          // console.log('Biometric', 'Success')
+            return resolve(true);
+          } else {
+          // console.log('Biometric', 'Cancelled',error);
+            return reject(createError(authConfig, 'Cancelled', codes.androidModuleCodes.AUTHENTICATION_CANCELED));
+          }
+        })
+        .catch((sperror) => {
+        // console.log('Biometric XX Failed:', sperror);
+          return reject(createError(authConfig, 'Unknown error', codes.androidModuleCodes.AUTHENTICATION_FAILED));
+        });
     });
-
   }
 };
 
